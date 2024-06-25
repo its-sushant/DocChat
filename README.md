@@ -2,6 +2,8 @@
 
 This is a DocChat which can be used to talk with any pdf document using Large Language Models.
 
+![DocChat](static/main.png)
+
 ## Tech Stack
 - Streamlit (For UI)
 - Llama Index (For Automerge Index and Retreiver)
