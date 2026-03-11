@@ -12,7 +12,7 @@ from llama_index.core import (
     StorageContext,
     VectorStoreIndex,
 )
-from llama_index.core.indices.postprocessor import SentenceTransformerRerank
+from llama_index.postprocessors.rankgpt_rerank import RankGPTRerank
 from llama_index.core.node_parser import HierarchicalNodeParser, get_leaf_nodes
 from llama_index.core.query_engine import RetrieverQueryEngine
 from llama_index.core.retrievers import AutoMergingRetriever
@@ -103,9 +103,7 @@ def build_query_engine(
     retriever = AutoMergingRetriever(
         base_retriever, index.storage_context, verbose=False
     )
-    rerank = SentenceTransformerRerank(
-        top_n=rerank_top_n, model="BAAI/bge-reranker-base"
-    )
+    rerank = RankGPTRerank(top_n=rerank_top_n, llm=Settings.llm)
     return RetrieverQueryEngine.from_args(retriever, node_postprocessors=[rerank])
 
 
