@@ -1,23 +1,20 @@
-FROM python:3.10
+FROM python:3.11-slim
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
-    software-properties-common \
     git \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
-
 RUN pip install --no-cache-dir -r requirements.txt
 
-ENV OPENAI_API_KEY="OPENAI_API_KEY"
+# Pre-download the reranker model so it's baked into the image
+RUN python -c "from sentence_transformers import CrossEncoder; CrossEncoder('BAAI/bge-reranker-base')"
 
 COPY . .
-
-RUN python src/build_index.py
 
 EXPOSE 8501
 
